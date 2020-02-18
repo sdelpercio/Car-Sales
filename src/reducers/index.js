@@ -22,7 +22,6 @@ export const featureReducer = (state = initialState, action) => {
 			const addedFeature = state.additionalFeatures.find(
 				item => item.id === action.payload
 			);
-			console.log(addedFeature);
 
 			return {
 				...state,
@@ -35,6 +34,26 @@ export const featureReducer = (state = initialState, action) => {
 				additionalFeatures: state.additionalFeatures.filter(
 					item => item.id !== action.payload
 				)
+			};
+
+		case 'REMOVE_FEATURE':
+			// find clicked feature
+			const removedFeature = state.car.features.find(
+				item => item.id === action.payload
+			);
+			console.log(removedFeature);
+
+			return {
+				...state,
+				// first, remove feature from car.features state
+				car: {
+					...state.car,
+					features: state.car.features.filter(
+						item => item.id !== action.payload
+					)
+				},
+				// then, add feature back to additionalFeatures state
+				additionalFeatures: [...state.additionalFeatures, removedFeature]
 			};
 		default:
 			return state;
