@@ -25,12 +25,15 @@ export const featureReducer = (state = initialState, action) => {
 
 			return {
 				...state,
-				// first, add feature into car.features state
+				// first, adjust additional price of features
+				additionalPrice: (state.additionalPrice += addedFeature.price),
+
+				// then, add feature into car.features state
 				car: {
 					...state.car,
 					features: [...state.car.features, addedFeature]
 				},
-				// then, remove feature from additionalFeatures state
+				// last, remove feature from additionalFeatures state
 				additionalFeatures: state.additionalFeatures.filter(
 					item => item.id !== action.payload
 				)
@@ -45,14 +48,17 @@ export const featureReducer = (state = initialState, action) => {
 
 			return {
 				...state,
-				// first, remove feature from car.features state
+				// first, subtract feature price from additional price
+				additionalPrice: (state.additionalPrice -= removedFeature.price),
+
+				// then, remove feature from car.features state
 				car: {
 					...state.car,
 					features: state.car.features.filter(
 						item => item.id !== action.payload
 					)
 				},
-				// then, add feature back to additionalFeatures state
+				// last, add feature back to additionalFeatures state
 				additionalFeatures: [...state.additionalFeatures, removedFeature]
 			};
 		default:
